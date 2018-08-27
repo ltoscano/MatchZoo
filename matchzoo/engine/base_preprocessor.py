@@ -55,6 +55,20 @@ class BasePreprocessor(metaclass=abc.ABCMeta):
         else:
             return self.transform(inputs, stage)
 
+    @property
+    def context(self):
+        """Get fitted parameters."""
+        return self._context
+
+    @context.setter
+    def context(self, context: dict):
+        """
+        Set pre-fitted context.
+
+        :param context: pre-fitted context.
+        """
+        self._context = context
+
     def save(self, dirpath: typing.Union[str, Path]):
         """
         Save the :class:`DSSMPreprocessor` object.
