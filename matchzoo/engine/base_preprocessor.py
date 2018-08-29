@@ -14,6 +14,10 @@ class BasePreprocessor(metaclass=abc.ABCMeta):
 
     DATA_FILENAME = 'preprocessor.dill'
 
+    def __init__(self):
+        """Class Initialization."""
+        self._context = {}
+
     @abc.abstractmethod
     def fit(self, inputs: list) -> 'BasePreprocessor':
         """

@@ -48,9 +48,9 @@ class DSSMPreprocessor(engine.BasePreprocessor):
 
     def __init__(self):
         """Initialization."""
-        self._context = {}
         self._datapack = None
         self._cache = []
+        super().__init__()
 
     def _prepare_stateless_units(self) -> list:
         """Prepare needed process units."""
@@ -97,10 +97,10 @@ class DSSMPreprocessor(engine.BasePreprocessor):
         vocab_unit.fit(vocab)
 
         # Store the fitted parameters in context.
-        self._context['term_index'] = vocab_unit.state['term_index']
+        self.context['term_index'] = vocab_unit.state['term_index']
         dim_triletter = len(vocab_unit.state['term_index']) + 1
-        self._context['input_shapes'] = [(dim_triletter,), (dim_triletter,)]
-        self._datapack.context = self._context
+        self.context['input_shapes'] = [(dim_triletter,), (dim_triletter,)]
+        self._datapack.context = self.context
         return self
 
     def transform(
@@ -120,13 +120,13 @@ class DSSMPreprocessor(engine.BasePreprocessor):
 
         if stage not in ['train', 'test']:
             raise ValueError(f'{stage} is not a valid stage name.')
-        if not self._context.get('term_index'):
+        if not self.context.get('term_index'):
             raise ValueError(
                 "Please fit term_index before apply transofm function.")
 
         # prepare word hashing unit.
         hashing = preprocessor.WordHashingUnit(
-            self._context['term_index'])
+            self.context['term_index'])
 
         logger.info(f"Start processing input data for {stage} stage.")
 
